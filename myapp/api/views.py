@@ -14,7 +14,9 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     instance.profile.save()
-
+def show_profile(request):
+    profile_image = Profile.objects.all()
+    return render(request, 'profile.htmml', {'profile_images': profile_image})
 
 # View for listing tasks
 def ListTodo(request):

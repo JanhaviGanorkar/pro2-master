@@ -7,7 +7,7 @@ from django.db import models
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
-    profile_image = models.ImageField(upload_to='profile_images/', default='default.jpg')
+    profile_image = models.ImageField(upload_to='profile_images/', default='media/logo.jpg')
 
     def __str__(self):
         return self.user.username
