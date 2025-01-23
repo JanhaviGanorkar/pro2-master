@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}Add Comment{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Page Heading -->
+  
+
+    <!-- Form Card -->
+    <div class="card mx-auto shadow-sm" style="max-width: 30rem;">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" class="form">
+                {% csrf_token %}
+                
+                {{ form.as_p }}
+                <button class="btn btn-warning w-100 mt-3" type="submit">
+                    {% if form.instance.pk %}
+                        Update Comment
+                    {% else %}
+                        Add Comment
+                    {% endif %}
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Back Link -->
+    <div class="text-center mt-3">
+        <a href="{% url 'tweet_list' %}" class="btn btn-secondary">Back</a>
+    </div>
+</div>
+{% endblock %}

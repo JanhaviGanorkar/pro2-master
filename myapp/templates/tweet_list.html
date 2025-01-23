@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block title %}My Website{% endblock %}
+
+{% block content %}
+<div data-bs-theme="dark" class="container my-5">
+
+    <!-- Page Title -->
+    <h1 class="text-center text-primary mb-4">Welcome to My Website!</h1>
+
+    <!-- Create Tweet Button -->
+    <div class="text-center mb-4">
+        <a class="btn btn-success btn-lg shadow-sm" href="{% url 'tweet_create' %}">Create a Tweet</a>
+    </div>
+
+    <!-- Tweets Section -->
+    <div class="row g-4">
+        {% if tweets %}
+        {% for tweet in tweets %}
+        <div class="col-md-4"> <!-- Responsive grid column -->
+            <div class="card shadow-lg h-100" style="transition: transform 0.3s, box-shadow 0.3s;">
+
+                <!-- Tweet Image -->
+                {% if tweet.photo %}
+                <img src="{{ tweet.photo.url }}" class="card-img-top img-fluid" alt="Tweet Image"
+                    style="height: 200px; object-fit: cover;">
+                {% endif %}
+
+                <!-- Tweet Body -->
+                <div class="card-body">
+                    <h5 class="card-title text-primary">{{ tweet.user.username }}</h5>
+                    <p class="card-text text-muted">{{ tweet.text }}</p>
+                    <div class="m-3">
+                        <!-- Like Button -->
+                        <a href="{% url 'like_toggle' tweet.id %}" class="btn  btn-sm">
+                            <box-icon name='like' color="primary"></box-icon> 
+                        </a>
+                        <span class="like-count">{{ tweet.like_set.count }}</span> <!-- Display like count -->
+                        <!-- Share Button -->
+                        <box-icon name='share'></box-icon>
+                        <!-- Comment Button -->
+                        <a href="{% url 'tweet_comment' tweet.id %}"><box-icon name='comment'></box-icon></a>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                {% if tweet.user == user %}
+                <div class="d-flex">
+                    <a href="{% url 'tweet_edit' tweet.id %}" class="btn btn-primary me-2 btn-sm">Edit</a>
+                    <a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-danger btn-sm">Delete</a>
+                    <a href="{% url 'tweet_details' tweet.id %}" class="btn btn-danger btn-sm">Read More</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <!-- Fallback if No Tweets Available -->
+        <div class="text-center text-muted">
+            <i class="bi bi-plus-circle display-4"></i> <!-- Bootstrap Icons -->
+            <h2>No Tweets Available</h2>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<style>
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+        transform: translateY(-3px);
+        transition: 0.2s ease-in-out;
+    }
+</style>
+
+{% endblock %}
