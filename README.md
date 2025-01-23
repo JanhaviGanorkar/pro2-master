@@ -99,13 +99,13 @@ http://127.0.0.1:8000/
 
 ## 🔮 Future Enhancements
 
-- Like/Dislike feature for posts.
+- Friend Request functionality.
 
 - Follow/Unfollow functionality.
 
 - Improved UI with more Bootstrap components.
 
-- API integration for mobile apps.
+- Chat with friends.
 
 ## 📜 License
 
