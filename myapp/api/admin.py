@@ -18,3 +18,5 @@ admin.site.register(Task)
 admin.site.register(Tweet)
 admin.site.register(Like)
 admin.site.register(Profile)
+
+

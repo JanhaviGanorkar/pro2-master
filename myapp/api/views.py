@@ -8,15 +8,51 @@ from django.contrib.auth.decorators import login_required
 from .models import Profile
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from .forms import ProfileForm
+# from .models import  UserProfileUpdateForm
 
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  # Redirect to the same page after saving
+    else:
+        form = ProfileForm(instance=request.user.profile)  # Load current user data
+
+    context = {
+        'user': request.user,
+        'form': form  # Pass form to template
+    }
+    return render(request, 'profile.html', context)
+
+# def shear_post(request):
+# if request.method == "POST":
+#     form = ShearPostForm(request.POST, request.FILES)
+#     if form.is_valid():
+#         form.save()
+    
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     instance.profile.save()
+
+
+def upload_profile_image(request):
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=request.user.profile)
+    return render(request, 'add_profile.html', {'form': form})
+
 def show_profile(request):
     profile_image = Profile.objects.all()
-    return render(request, 'profile.htmml', {'profile_images': profile_image})
+    return render(request, 'profile.html', {'profile_images': profile_image})
 
 # View for listing tasks
 def ListTodo(request):
@@ -150,20 +186,18 @@ def tweet_comment(request, tweet_id):
 
     return render(request, 'addcomment.html', {'form': form, 'tweet': tweet})
 
-# views.py
-# from django.http import JsonResponse
-# from .models import Comment
+def repost_tweet(request, tweet_id):
+    original_tweet = get_object_or_404(Tweet, id=tweet_id)
 
+    # Check if user has already reposted the tweet
+    if Tweet.objects.filter(user=request.user, reposted_from=original_tweet).exists():
+        return redirect('tweet_list')
 
-# def tweet_details(request, tweet_id):
-#     tweet = get_object_or_404(Tweet, id=tweet_id)
-#     comments = tweet.comments.all().order_by('-created_at')  # Fetch related comments
-#     return render(request, 'tweet_detail.html', {'tweet': tweet})
-
-from django.shortcuts import render
-
-def profile(request):
-    context = {
-        'user': request.user  # Passes the logged-in user object
-    }
-    return render(request, 'profile.html', context)
+    # Create a new tweet with reposted reference
+    new_tweet = Tweet.objects.create(
+        user=request.user,
+        text=original_tweet.text,  # Reposting same content
+        photo = original_tweet.photo,
+        reposted_from=original_tweet
+    )
+    return redirect('tweet_add_tweet')

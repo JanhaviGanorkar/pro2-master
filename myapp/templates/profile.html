@@ -6,10 +6,9 @@
         <div class="card-body">
             <h2 class="text-center text-primary mb-4">Profile</h2>
             <p>First Name: {{ user.first_name }}</p>
-<p>Last Name: {{ user.last_name }}</p>
-<img src="{{ user.profile.profile_image.url }}" alt="Profile Picture" width="150">
-
-            
+            <p>Last Name: {{ user.last_name }}</p>
+            <img src="{{ user.profile.profile_image.url }}" alt="Profile Picture" width="150">
+            <a href="{% url 'upload_profile_image' %}">Add</a>
             <p class="text-center mt-3">
                 Don't have an account? <a href="{% url 'register' %}" class="text-decoration-none">Register here</a>
             </p>

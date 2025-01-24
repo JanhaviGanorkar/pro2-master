@@ -4,14 +4,12 @@ from django.utils import timezone
 # Create your models here.
 from django.db import models
 
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
     profile_image = models.ImageField(upload_to='profile_images/', default='media/logo.jpg')
 
     def __str__(self):
         return self.user.username
-
 
 class Task(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
@@ -30,8 +28,12 @@ class Tweet(models.Model):
     photo = models.ImageField(upload_to='photos/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    reposted_from = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL) 
     def __str__(self):
         return f'{self.user.username} - {self.text[:10]}'
+    
+    class Meta:
+        ordering = ['-created_at']
 
 
 class Like(models.Model):

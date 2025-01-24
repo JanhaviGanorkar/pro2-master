@@ -31,5 +31,7 @@ class CommentForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['profile_image']
+        fields = ['profile_image'] 
+
 # python manage.py migrate app_name previous_migration_name
+

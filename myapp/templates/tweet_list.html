@@ -37,7 +37,7 @@
                         </a>
                         <span class="like-count">{{ tweet.like_set.count }}</span> <!-- Display like count -->
                         <!-- Share Button -->
-                        <box-icon name='share'></box-icon>
+                       <a href="{% url 'tweet_add_tweet' tweet.id %}"> <box-icon name='share'></box-icon></a>
                         <!-- Comment Button -->
                         <a href="{% url 'tweet_comment' tweet.id %}"><box-icon name='comment'></box-icon></a>
                     </div>
