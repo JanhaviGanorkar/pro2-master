@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from .models import Task, Tweet, Like, Comment
 from .forms import TweetForm, TaskForm, UserRegistrationForm, CommentForm
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 from .models import Profile
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -137,7 +138,7 @@ def register(request):
             return redirect('tweet_list')
     else:
         form = UserRegistrationForm()
-    return render(request, 'register/register.html', {'form': form})
+    return render(request, 'registration/register.html', {'form': form})
 
 @login_required
 def tweet_details(request, tweet_id):
@@ -201,3 +202,23 @@ def repost_tweet(request, tweet_id):
         reposted_from=original_tweet
     )
     return redirect('tweet_add_tweet')
+
+# def log_in(request):
+#     if request.method == "POST":
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         user = authenticate(request, username=username, password=password)
+#         if user is not None:
+#             login(request, user)
+#             return redirect('home')  # Redirect to home page after login
+#         else:
+#             return redirect('login')
+#             messages.error(request, "Invalid username or password")
+
+#     return render(request, 'register/login.html')
+def logout_view(request):
+    logout(request)
+    return redirect('home')  # Ensure this points to a valid URL in your URLs list
+
+# def add_friend(Tweet, tweet_id):
+    # tweet = get_object_or_404(Tweet, id=tweet_id)
