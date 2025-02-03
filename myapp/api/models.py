@@ -52,3 +52,19 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.user.username} commented on "{self.tweet.text[:10]}"'
+
+class FriendRequest(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_requests")
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_requests")
+    accepted = models.BooleanField(default=False)
+
+    def accept(self):
+        self.accepted = True
+        self.save()
+
+        # Add both users to each other's friend list (assuming ManyToMany field)
+        self.sender.profile.friends.add(self.receiver)
+        self.receiver.profile.friends.add(self.sender)
+
+        # Delete the friend request after acceptance
+        self.delete()

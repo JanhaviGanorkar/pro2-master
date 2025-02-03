@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <meta http-equiv="refresh" content="5">  <!-- Auto refresh -->
+    <script src="https://cdn.tailwindcss.com"></script>  <!-- Tailwind CDN -->
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="w-full max-w-2xl bg-white shadow-lg rounded-lg overflow-hidden">
+        
+        <!-- Chat Header -->
+        <div class="bg-blue-600 text-white text-center py-3">
+            <h2 class="text-lg font-semibold">Live Chat Room</h2>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="p-4 h-96 overflow-y-auto space-y-2 bg-gray-50">
+            {% for message in messages %}
+                <div class="p-3 rounded-lg 
+                            {% if message.user == request.user %}
+                                bg-blue-500 text-white ml-auto text-right w-fit
+                            {% else %}
+                                bg-gray-200 text-black w-fit
+                            {% endif %}">
+                    <p class="text-sm font-semibold">{{ message.user.username }}</p>
+                    <p class="text-base">{{ message.content }}</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Message Input -->
+        <form method="post" class="p-3 bg-white flex">
+            {% csrf_token %}
+            <input type="text" name="message" placeholder="Type your message..."
+                   class="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button type="submit" class="ml-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                Send
+            </button>
+        </form>
+    </div>
+</body>
+</html>

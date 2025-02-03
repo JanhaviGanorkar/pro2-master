@@ -28,7 +28,7 @@
 
                 <!-- Tweet Body -->
                 <div class="card-body">
-                    <h5 class="card-title text-primary">{{ tweet.user.username }}</h5>
+                  <a href="{% url 'profile' %}"><h5 class="card-title text-primary">{{ tweet.user.username }}</h5></a>
                     <p class="card-text text-muted">{{ tweet.text }}</p>
                     <div class="m-3">
                         <!-- Like Button -->

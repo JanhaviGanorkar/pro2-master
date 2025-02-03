@@ -8,7 +8,6 @@
     <h1 class="text-center text-light mb-4">Welcome to My Website!</h1>
     <p class="text-center text-muted">Explore the tasks and enjoy a visually rich experience.</p>
     <a class="btn btn-success btn-lg shadow-sm" href="{% url 'addTask' %}">Write a Task</a>
-    
     <div class="row g-4">
         {% for task in tasks %}
         <div class="col-md-4">

@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from .models import Task, Tweet, Like, Comment
+from .models import FriendRequest
 from .forms import TweetForm, TaskForm, UserRegistrationForm, CommentForm
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -203,22 +204,61 @@ def repost_tweet(request, tweet_id):
     )
     return redirect('tweet_add_tweet')
 
-# def log_in(request):
-#     if request.method == "POST":
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         user = authenticate(request, username=username, password=password)
-#         if user is not None:
-#             login(request, user)
-#             return redirect('home')  # Redirect to home page after login
-#         else:
-#             return redirect('login')
-#             messages.error(request, "Invalid username or password")
+def log_in(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')  # Redirect to home page after login
+        else:
+            return redirect('login')
+            messages.error(request, "Invalid username or password")
 
-#     return render(request, 'register/login.html')
+    return render(request, 'register/login.html')
 def logout_view(request):
     logout(request)
     return redirect('home')  # Ensure this points to a valid URL in your URLs list
 
-# def add_friend(Tweet, tweet_id):
-    # tweet = get_object_or_404(Tweet, id=tweet_id)
+
+@login_required
+def friend_requests(request):
+    # Fetch only pending friend requests
+    friend_requests = FriendRequest.objects.filter(receiver=request.user, accepted=False)  
+    friends = request.user.profile.friends.all()  # Assuming a ManyToMany field in Profile
+    users = User.objects.exclude(id=request.user.id)  # Exclude current user
+
+    return render(request, 'friend_requests.html', {
+        'friend_requests': friend_requests,
+        'friends': friends,
+        'users': users
+    })
+
+
+
+@login_required
+def send_friend_request(request, user_id):
+    receiver = get_object_or_404(User, id=user_id)
+
+    # Prevent sending duplicate requests
+    if not FriendRequest.objects.filter(sender=request.user, receiver=receiver).exists():
+        FriendRequest.objects.create(sender=request.user, receiver=receiver)
+    
+    return redirect('friend_requests_page')
+
+
+@login_required
+def accept_friend_request(request, request_id):
+    friend_request = get_object_or_404(FriendRequest, id=request_id, receiver=request.user)
+    
+    # Ensure there's a method to accept the friend request
+    friend_request.accept()  
+
+    return redirect('friend_requests')
+
+
+@login_required
+def friend_requests_page(request):
+    friend_requests = FriendRequest.objects.filter(receiver=request.user, accepted=False)
+    return render(request, 'friend_requests.html', {'friend_requests': friend_requests})

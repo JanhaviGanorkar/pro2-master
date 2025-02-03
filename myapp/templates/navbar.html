@@ -9,7 +9,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active text-white-50 hover-opacity-100 rounded-2 mx-2 px-3" aria-current="page" href="{% url 'home' %}">Home</a>
+            <a class="nav-link active text-white-50 hover-opacity-100 rounded-2 mx-2 px-3" aria-current="page" href="{% url 'tweet_list' %}">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-white-50 hover-opacity-100 rounded-2 mx-2 px-3" href="{% url 'register' %}">About</a>
@@ -22,10 +22,17 @@
         </ul>
         
         <ul class="navbar-nav">
+          <a class="nav-link text-white-50 hover-opacity-100 rounded-2 mx-2 px-3" href="{% url 'tweet_list' %}">Home1</a>
           {% if user.is_authenticated %}
+          <form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+
+            <button>Logout</button>
+          </form>
           <li class="nav-item">
-              <a class="nav-link text-white-50 hover-opacity-100 rounded-2 mx-2 px-3" href="{% url 'logout' %}">Logout</a>
+            <a class="nav-link text-white-50 hover-opacity-100 rounded-2 mx-2 px-3" href="{% url 'profile' %}">Profile</a>
           </li>
+        
       {% else %}
           <li class="nav-item">
               <a class="nav-link text-white-50 hover-opacity-100 rounded-2 mx-2 px-3" href="{% url 'login' %}">Login</a>
