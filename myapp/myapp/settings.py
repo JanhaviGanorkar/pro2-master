@@ -21,6 +21,8 @@ ALLOWED_HOSTS = []
 
 # Installed apps
 INSTALLED_APPS = [
+    # 'daphne', 
+    # 'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -110,3 +112,10 @@ LOGIN_REDIRECT_URL = '/api'
 LOGOUT_REDIRECT_URL = '/api'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",  # Use Redis in production
+    },
+}

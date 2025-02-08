@@ -29,12 +29,7 @@ def profile(request):
     }
     return render(request, 'profile.html', context)
 
-# def shear_post(request):
-# if request.method == "POST":
-#     form = ShearPostForm(request.POST, request.FILES)
-#     if form.is_valid():
-#         form.save()
-    
+
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -262,3 +257,8 @@ def accept_friend_request(request, request_id):
 def friend_requests_page(request):
     friend_requests = FriendRequest.objects.filter(receiver=request.user, accepted=False)
     return render(request, 'friend_requests.html', {'friend_requests': friend_requests})
+
+
+
+
+# https://www.youtube.com/playlist?list=PLupBPPRv3g1Vn2Ss3B0-Zv3rKyb8-ijZt
