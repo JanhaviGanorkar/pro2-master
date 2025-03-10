@@ -7,7 +7,7 @@
     {% for request in friend_requests %}
       <li>
         {{ request.sender.username }} sent you a friend request.
-        <form action="{% url 'accept_friend_request' request.id %}" method="post">
+        <form action="{% url 'accept-friend-request' request.id %}" method="post">
           {% csrf_token %}
           <button type="submit">Accept</button>
         </form>

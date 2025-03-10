@@ -28,7 +28,11 @@
 
                 <!-- Tweet Body -->
                 <div class="card-body">
-                  <a href="{% url 'profile' %}"><h5 class="card-title text-primary">{{ tweet.user.username }}</h5></a>
+                    <a href="{% url 'user_profile' tweet.user.username %}">
+                        {{ tweet.user.username }}
+                    </a>
+                 
+                    
                     <p class="card-text text-muted">{{ tweet.text }}</p>
                     <div class="m-3">
                         <!-- Like Button -->
@@ -39,16 +43,16 @@
                         <!-- Share Button -->
                        <a href="{% url 'tweet_add_tweet' tweet.id %}"> <box-icon name='share'></box-icon></a>
                         <!-- Comment Button -->
-                        <a href="{% url 'tweet_comment' tweet.id %}"><box-icon name='comment'></box-icon></a>
+                        <a href="{% url 'tweet_details' tweet.id %}" ><box-icon name='comment'></box-icon></a>
                     </div>
                 </div>
 
                 <!-- Action Buttons -->
+                <a href="{% url 'tweet_details' tweet.id %}" class="btn btn-danger btn-sm">Read More</a>
                 {% if tweet.user == user %}
                 <div class="d-flex">
                     <a href="{% url 'tweet_edit' tweet.id %}" class="btn btn-primary me-2 btn-sm">Edit</a>
                     <a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-danger btn-sm">Delete</a>
-                    <a href="{% url 'tweet_details' tweet.id %}" class="btn btn-danger btn-sm">Read More</a>
                 </div>
                 {% endif %}
             </div>

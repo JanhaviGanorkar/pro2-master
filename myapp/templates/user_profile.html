@@ -1,0 +1,12 @@
+<h1>{{ profile.user.username }}'s Profile</h1>
+<img src="{{ profile.profile_image.url }}" alt="Profile Picture" width="150">
+
+<h2>Tweets</h2>
+{% for tweet in tweets %}
+    <div>
+        <img src="{{ tweet.user.profile.profile_image.url }}" alt="Profile Picture" width="50">
+        <strong>{{ tweet.user.username }}</strong>
+        <p>{{ tweet.text }}</p>
+        <hr>
+    </div>
+{% endfor %}

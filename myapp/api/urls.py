@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
-from .models import FriendRequest
+from api.views import send_friend_request, accept_friend_request, reject_friend_request, user_profile
 
 urlpatterns = [
     path('ListTodo/', views.ListTodo, name='ListTodo'),
@@ -21,7 +21,8 @@ urlpatterns = [
     path('create_or_update_user_profile', views.create_or_update_user_profile, name='create_or_update_user_profile'),
     path('upload_profile_image', views.upload_profile_image, name='upload_profile_image'),
     path('<int:tweet_id>/tweet_add_tweet', views.repost_tweet, name='tweet_add_tweet'),  
-    path('api/friend_requests/', views.friend_requests_page, name='friend_requests_page'),
-    path('send-friend-request/<int:user_id>/', views.send_friend_request, name='send_friend_request'),
-    path('accept-friend-request/<int:request_id>/', views.accept_friend_request, name='accept_friend_request'),
+    path('send-friend-request/<int:receiver_id>/', send_friend_request, name='send-friend-request'),
+    path('accept-friend-request/<int:request_id>/', accept_friend_request, name='accept-friend-request'),
+    path('reject-friend-request/<int:request_id>/', reject_friend_request, name='reject-friend-request'),
+    path('profile_user/<str:username>/', user_profile, name='user_profile'),
 ]

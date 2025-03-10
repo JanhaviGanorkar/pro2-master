@@ -11,6 +11,7 @@ from .models import Profile
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .forms import ProfileForm
+from django.http import JsonResponse
 # from .models import  UserProfileUpdateForm
 
 @login_required
@@ -28,6 +29,10 @@ def profile(request):
         'form': form  # Pass form to template
     }
     return render(request, 'profile.html', context)
+
+
+
+
 
 
 @receiver(post_save, sender=User)
@@ -253,6 +258,17 @@ def accept_friend_request(request, request_id):
     return redirect('friend_requests')
 
 
+def reject_friend_request(request, request_id):
+    """Rejects a friend request."""
+    friend_request = get_object_or_404(FriendRequest, id=request_id)
+
+    if friend_request.receiver != request.user:
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
+
+    friend_request.reject()
+    return JsonResponse({'message': 'Friend request rejected'})
+
+
 @login_required
 def friend_requests_page(request):
     friend_requests = FriendRequest.objects.filter(receiver=request.user, accepted=False)
@@ -262,3 +278,14 @@ def friend_requests_page(request):
 
 
 # https://www.youtube.com/playlist?list=PLupBPPRv3g1Vn2Ss3B0-Zv3rKyb8-ijZt
+
+
+def user_profile(request, username):
+    user = get_object_or_404(User, username=username)
+    profile = get_object_or_404(Profile, user=user)
+    tweets = Tweet.objects.filter(user=user).order_by('-created_at')
+
+    return render(request, 'user_profile.html', {
+        'profile': profile,
+        'tweets': tweets
+    })
